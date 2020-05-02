@@ -14,31 +14,33 @@ function createEmployeeRecords(arrayOfArrays) {
   return arrayOfArrays.map(createEmployeeRecord);
 }
 
-function createTimeInEvent(record, date) {
-  record.timeInEvents.push({
+function createTimeInEvent(employee, dateStamp) {
+  const [date, hour] = dateStamp.split(" ");
+
+  employee.timeInEvents.push({
     type: "TimeIn",
-    hour: parseInt(date.slice(-4), 10),
-    date: date.slice(0, 10),
+    hour: parseInt(hour, 10),
+    date,
   });
-  return record;
+  return employee;
 }
 
-function createTimeOutEvent(record, date) {
-  record.timeOutEvents.push({
+function createTimeOutEvent(employee, dateStamp) {
+  const [date, hour] = dateStamp.split(" ");
+
+  employee.timeOutEvents.push({
     type: "TimeOut",
-    hour: parseInt(date.slice(-4), 10),
-    date: date.slice(0, 10),
+    hour: parseInt(hour, 10),
+    date,
   });
-  return record;
+  return employee;
 }
 
 function hoursWorkedOnDate(record, date) {
   const timeOutOnDate = record.timeOutEvents.find(
-    (event) => event.date === date.slice(0, 10)
+    (event) => event.date === date
   );
-  const timeInOnDate = record.timeInEvents.find(
-    (event) => event.date === date.slice(0, 10)
-  );
+  const timeInOnDate = record.timeInEvents.find((event) => event.date === date);
 
   return (timeOutOnDate.hour - timeInOnDate.hour) / 100;
 }
